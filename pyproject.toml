@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "easy_post_twitter"
-version = "1.0.0"
+version = "1.0.1"
 description = "The easy way to send posts to twitter."
 authors = ["Thiago Oliveira <thiceconelo@gmail.com>"]
 
