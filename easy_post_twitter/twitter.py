@@ -12,7 +12,7 @@ class Twitter:
     @classmethod
     def __get_env(cls):
         """ Getter for the environment variables """
-        path = Path('.') / '.env'
+        path = Path(__file__).parent.parent.parent.parent.parent.parent / '.env'
         if path.is_file():
             load_dotenv(dotenv_path=path)
         else:
