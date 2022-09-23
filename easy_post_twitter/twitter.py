@@ -53,7 +53,7 @@ class Twitter:
                                 client.consumer_secret)
             auth.set_access_token(client.access_token, client.access_token_secret)
             api = tweepy.API(auth=auth)
-            log.info(f'API created successfully. ID:')
+            #log.info(f'API created successfully. ID:')
             return api
         except Exception as e:
             log.error(f'Error creating API. Error: {e}')
@@ -125,14 +125,22 @@ class Twitter:
                 })
         return objs, client
 
-    def tweet_to_publish_with_image(self, text, query, imgs):
+    def tweet_to_publish_with_image(self, text, imgs, query=None, sequential=False):
         """ Publish a tweet with an image """
         if self.__with_images is False:
             raise Exception('Images are not enabled. E.g. Twitter(with_images=True)')
 
         log.info('Starting post')
         try:
-            api = self.__get_api()
+            if sequential is False:
+                if isinstance(imgs, list) | isinstance(imgs, dict):
+                    raise Exception('Sequential is False. Only one image is allowed.')
+                api = self.__get_api()
+                media = api.media_upload(imgs)
+                api.update_status(status=text, media_ids=[media.media_id])
+                log.info('Tweet published successfully')
+                return
+
             api.update_status(status=text)
             log.info('Header posted')
             log.info('Waiting broadcasting')
@@ -187,5 +195,7 @@ class Twitter:
 
 
 if __name__ == '__main__':
-    twitter = Twitter()
-    twitter.get_client().get_me()
+    img = '/home/drakon/Documents/DEV/projetos/easy_post_twitter/imgs/market1.png'
+    tw = Twitter(with_images=True)
+    status = 'B3 interbank deposit futures: today and a month ago #FuturodoCDI #mercadofinanceiro'
+    tw.tweet_to_publish_with_image(text=status, imgs=img, sequential=False)
