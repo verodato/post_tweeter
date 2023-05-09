@@ -193,6 +193,14 @@ class Twitter:
             except Exception as e:
                 log.error(f'Error creating tweet. Error: {e}')
 
+    def tweetItNow(self, text):
+        '''Tweet the "text" and do not ask questions'''
+        client = self.__get_client()
+        try:
+            response = client.create_tweet(text=text)
+            log.info(f'Tweet created successfully. ID: {response.data["id"]}')
+        except Exception as e:
+            log.error(f'Error creating tweet. Error: {e}')
 
 if __name__ == '__main__':
     img = '/home/drakon/Documents/DEV/projetos/easy_post_twitter/imgs/market1.png'
