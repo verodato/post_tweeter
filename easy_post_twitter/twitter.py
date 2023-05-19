@@ -208,23 +208,17 @@ class Twitter:
         local file keeps the state that informs the last day when the 
         state was last updated and the ID of the last tweet.
         '''
-        #dir_path = Path(__file__).parent.parent.parent.parent.parent.parent
-        #file = dir_path / 'output/state.json'
-        #id, last_update = DataProcess.load_last_date(file=file)
-        #print(date.today(), '  ',last_update)
         client = self.__get_client()
         if isThread:
             try:
                 print('Thread. Last tweet id:',id)
                 response = client.create_tweet(text=text, in_reply_to_tweet_id=id)
-                #DataProcess.update_state(file, response)
                 return response
             except Exception as e:
                 log.error(f'Error creating thread. Error: {e}')
         else:
             try:
                 response = client.create_tweet(text=text)
-                #DataProcess.update_state(file, response)
                 log.info(f'Tweet created successfully. ID: {response.data["id"]}')
                 return response
             except Exception as e:
