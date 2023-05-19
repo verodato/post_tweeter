@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import date, datetime
 from time import sleep
 from loguru import logger as log
 import os
@@ -201,6 +201,26 @@ class Twitter:
             log.info(f'Tweet created successfully. ID: {response.data["id"]}')
         except Exception as e:
             log.error(f'Error creating tweet. Error: {e}')
+
+    def tweetNthread(self, text):
+        ''' This method do not use twitter's api search to determine if
+        a tweet is the day's opening one or a response to an early one. A state 
+        local file keeps the state that informs the last day when the 
+        state was last updated and the ID of the last tweet.
+        '''
+        last_update = DataProcess.load_last_date(file=path + 'output/tsv/state.json')
+        today = date.today()
+        if today > last_update:
+          
+            client = self.__get_client()
+            try:
+                response = client.create_tweet(text=text)
+                DataProcess.update_state(file=path + 'output/tsv/state.json',response=response)
+                log.info(f'Tweet created successfully. ID: {response.data["id"]}')
+            except Exception as e:
+                log.error(f'Error creating tweet. Error: {e}')
+            
+        
 
 if __name__ == '__main__':
     img = '/home/drakon/Documents/DEV/projetos/easy_post_twitter/imgs/market1.png'
