@@ -223,8 +223,44 @@ class Twitter:
                 return response
             except Exception as e:
                 log.error(f'Error creating tweet. Error: {e}')
-            
-        
+
+
+    def tweetIt(self, text, img, isThread, id):
+        ''' This method do not use twitter's api search to determine if
+        a tweet is the day's opening one or a response to an early one. 
+        Tweets with or without images.
+        '''
+        # with image
+        if img != '':
+          if isThread:
+              api = self.__get_api()
+              media = api.media_upload(img)
+              response = api.update_status(status=text, media_ids=[media.media_id], in_reply_to_status_id=id)
+              return response
+          else:
+              api = self.__get_api()
+              media = api.media_upload(img)
+              response = api.update_status(status=text, media_ids=[media.media_id])
+              return response
+
+        # no image
+        else:          
+          client = self.__get_client()
+          if isThread:
+              try:
+                  print('Thread. Last tweet id:',id)
+                  response = client.create_tweet(text=text, in_reply_to_tweet_id=id)
+                  return response
+              except Exception as e:
+                  log.error(f'Error creating thread. Error: {e}')
+          else:
+              try:
+                  response = client.create_tweet(text=text)
+                  log.info(f'Tweet created successfully. ID: {response.data["id"]}')
+                  return response
+              except Exception as e:
+                  log.error(f'Error creating tweet. Error: {e}')
+
 
 if __name__ == '__main__':
     img = '/home/drakon/Documents/DEV/projetos/easy_post_twitter/imgs/market1.png'
