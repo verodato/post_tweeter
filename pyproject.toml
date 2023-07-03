@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "easy_post_twitter"
-version = "1.0.6"
+version = "1.0.8"
 description = "The easy way to send posts to twitter."
 authors = ["Thiago Oliveira <thiceconelo@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
 loguru = "^0.6.0"
-tweepy = "^4.10.0"
+tweepy = "^4.14.0"
 python-dotenv = "^0.20.0"
 
 [tool.poetry.dev-dependencies]

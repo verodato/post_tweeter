@@ -232,15 +232,16 @@ class Twitter:
         '''
         # with image
         if img != '':
+          client = self.__get_client()
           if isThread:
               api = self.__get_api()
               media = api.media_upload(img)
-              response = api.update_status(status=text, media_ids=[media.media_id], in_reply_to_status_id=id)
+              response = client.create_tweet(text=text, media_ids=[media.media_id], in_reply_to_tweet_id=id)
               return response
           else:
               api = self.__get_api()
               media = api.media_upload(img)
-              response = api.update_status(status=text, media_ids=[media.media_id])
+              response = client.create_tweet(text=text, media_ids=[media.media_id])
               return response
 
         # no image
@@ -260,6 +261,7 @@ class Twitter:
                   return response
               except Exception as e:
                   log.error(f'Error creating tweet. Error: {e}')
+
 
 
 if __name__ == '__main__':
